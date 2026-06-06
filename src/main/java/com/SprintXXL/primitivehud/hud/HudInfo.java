@@ -1,6 +1,7 @@
 package com.SprintXXL.primitivehud.hud;
 
 import com.SprintXXL.primitiveoregen.util.OreGenHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
@@ -19,6 +20,8 @@ public class HudInfo {
 
     public final String biomeName;
 
+    public final int fps;
+
     public final boolean isDepositChunk;
     public final boolean isDepositCenter;
 
@@ -36,6 +39,8 @@ public class HudInfo {
 
         this.biomeName = player.world.getBiome(player.getPosition()).getBiomeName();
 
+        this.fps = Minecraft.getDebugFPS();
+
         this.isDepositChunk = OreGenHelper.isDepositChunk(chunkX, chunkZ);
         this.isDepositCenter = OreGenHelper.isDepositCenter(blockX, blockZ);
     }
@@ -48,11 +53,22 @@ public class HudInfo {
         return isDepositCenter ? TextFormatting.GREEN + "YES" : TextFormatting.RED + "NO";
     }
 
-    public String getPlayerCoords() {
+    public String getCoords() {
         return playerX + ", " + playerY + ", " + playerZ;
     }
 
-    public String getBiomeText() {
+    public String getBiome() {
         return biomeName;
+    }
+
+    public String getFPS() {
+
+        if (fps > 120) {
+            return TextFormatting.GREEN + String.valueOf(fps);
+        }
+        else if (fps >= 60) {
+            return TextFormatting.YELLOW + String.valueOf(fps);
+        }
+        return TextFormatting.RED + String.valueOf(fps);
     }
 }
